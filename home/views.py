@@ -11,7 +11,7 @@ class HomeView(BaseView):
     def get(self,request):
         self.views
         self.views['sliders'] = Slider.objects.all()
-        self.views['ads'] = Feature.objects.all()
+        self.views['features'] = Feature.objects.all()
         self.views['brands'] = Brand.objects.all()
         self.views['news'] = Product.objects.filter(labels = 'new')
         self.views['hots'] = Product.objects.filter(labels='hot')
