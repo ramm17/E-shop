@@ -4,11 +4,11 @@
 
         <!-- Main Slider Start -->
         <div class="home-slider">
-            {% for slide in sliders %}
             <div class="main-slider">
+                {% for slide in sliders %}
                 <div class="main-slider-item"><img src="{{slide.image.url}}" alt="Slider Image" /></div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
         <!-- Main Slider End -->
         
@@ -42,7 +42,7 @@
                     <div class="col-md-4">
                         <div class="category-img">
                             <img src="{{cat.image.url}}" />
-                            <a class="category-name" href="">
+                            <a class="category-name" href="/category/{{cat.slug}}">
                                 <h2>{{cat.name}}</h2>
                             </a>
                         </div>
