@@ -19,18 +19,17 @@
         <div class="product-detail">
             <div class="container">
                 <div class="row">
+                    {% for detail in productdetails %}
                     <div class="col-lg-9">
                         <div class="row align-items-center product-detail-top">
                             <div class="col-md-5">
                                 <div class="product-slider-single">
-                                    <img src="img/product-1.png" alt="Product Image">
-                                    <img src="img/product-2.png" alt="Product Image">
-                                    <img src="img/product-3.png" alt="Product Image">
+                                    <img src="{{detail.image.url}}" alt="Product Image">
                                 </div>
                             </div>
                             <div class="col-md-7">
                                 <div class="product-content">
-                                    <div class="title"><h2>Phasellus Gravida</h2></div>
+                                    <div class="title"><h2>{{detail.name}}</h2></div>
                                     <div class="ratting">
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
@@ -38,7 +37,12 @@
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
                                     </div>
-                                    <div class="price">$22 <span>$25</span></div>
+                                    <div class="price">{% if detail.discounted_price %}
+                                        ${{detail.discounted_price}} <span>${{detail.price}}</span>
+                                        {% else %}
+                                        {{detail.price}}
+                                        {% endif %}
+                                    </div>
                                     <div class="details">
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante suscipit non.
@@ -80,56 +84,62 @@
                                     <div id="description" class="container tab-pane active"><br>
                                         <h4>Product description</h4>
                                         <p>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante suscipit non. Praesent in faucibus tellus, sed gravida lacus. Vivamus eu diam eros. Aliquam et sapien eget arcu rhoncus scelerisque. Suspendisse sit amet neque neque. Praesent suscipit et magna eu iaculis. Donec arcu libero, commodo ac est a, malesuada finibus dolor. Aenean in ex eu velit semper fermentum. In leo dui, aliquet sit amet eleifend sit amet, varius in turpis. Maecenas fermentum ut ligula at consectetur. Nullam et tortor leo. 
+                                            {{detail.description}}
                                         </p>
                                     </div>
                                     <div id="specification" class="container tab-pane fade"><br>
                                         <h4>Product specification</h4>
                                         <ul>
-                                            <li>Lorem ipsum dolor sit amet</li>
-                                            <li>Lorem ipsum dolor sit amet</li>
-                                            <li>Lorem ipsum dolor sit amet</li>
-                                            <li>Lorem ipsum dolor sit amet</li>
-                                            <li>Lorem ipsum dolor sit amet</li>
+                                            {{detail.specification}}
                                         </ul>
                                     </div>
                                     <div id="reviews" class="container tab-pane fade"><br>
+                                        {% for reviews in product_reviews %}
                                         <div class="reviews-submitted">
-                                            <div class="reviewer">Phasellus Gravida - <span>01 Jan 2020</span></div>
+                                            <div class="reviewer">{{reviews.name}} - <span>{{reviews.date}}</span></div>
                                             <div class="ratting">
+                                                {% for i in 1|ljust:reviews.star %}
                                                 <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                                {% endfor %}
                                             </div>
                                             <p>
-                                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
+                                                {{reviews.review}}
                                             </p>
                                         </div>
+                                        {% endfor %}
                                         <div class="reviews-submit">
                                             <h4>Give your Review:</h4>
+                                            <form method="POST" action="/product_review">
+                                                {% csrf_token %}
                                             <div class="ratting">
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
+                                                <label for="star">Choose a star:</label>
+
+                                                <select name="star" id="star">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
                                             </div>
                                             <div class="row form">
                                                 <div class="col-sm-6">
-                                                    <input type="text" placeholder="Name">
+                                                    <input type="text" name="name" placeholder="Name">
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <input type="email" placeholder="Email">
+                                                    <input type="email" name="email" placeholder="Email">
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    <textarea placeholder="Review"></textarea>
+                                                    <textarea placeholder="Review" name="review"></textarea>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <input type="hidden" name="slug" value="{{detail.slug}}">
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    <button>Submit</button>
+                                                    <button type="submit">Submit</button>
                                                 </div>
                                             </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -146,134 +156,42 @@
                         </div>
                         
                         <div class="row align-items-center product-slider product-slider-3">
-                            <div class="col-lg-3">
-                                <div class="product-item">
-                                    <div class="product-image">
-                                        <a href="product-detail.html">
-                                            <img src="img/product-1.png" alt="Product Image">
-                                        </a>
-                                        <div class="product-action">
-                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                            <a href="#"><i class="fa fa-heart"></i></a>
-                                            <a href="#"><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-content">
-                                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                        <div class="ratting">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                        <div class="price">$22 <span>$25</span></div>
-                                    </div>
+                            {% for hot in related_products %}
+                    <div class="col-lg-3">
+                        <div class="product-item">
+                            <div class="product-image">
+                                <a href="product-detail.html">
+                                    <img src="{{hot.image.url}}" alt="Product Image">
+                                </a>
+                                <div class="product-action">
+                                    <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                    <a href="#"><i class="fa fa-heart"></i></a>
+                                    <a href="#"><i class="fa fa-search"></i></a>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="product-item">
-                                    <div class="product-image">
-                                        <a href="product-detail.html">
-                                            <img src="img/product-2.png" alt="Product Image">
-                                        </a>
-                                        <div class="product-action">
-                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                            <a href="#"><i class="fa fa-heart"></i></a>
-                                            <a href="#"><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-content">
-                                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                        <div class="ratting">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                        <div class="price">$22 <span>$25</span></div>
-                                    </div>
+                            <div class="product-content">
+                                <div class="title"><a href="/product_details/{{hot.slug}}">{{hot.name}}</a></div>
+                                <div class="ratting">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="product-item">
-                                    <div class="product-image">
-                                        <a href="product-detail.html">
-                                            <img src="img/product-3.png" alt="Product Image">
-                                        </a>
-                                        <div class="product-action">
-                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                            <a href="#"><i class="fa fa-heart"></i></a>
-                                            <a href="#"><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-content">
-                                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                        <div class="ratting">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                        <div class="price">$22 <span>$25</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="product-item">
-                                    <div class="product-image">
-                                        <a href="product-detail.html">
-                                            <img src="img/product-4.png" alt="Product Image">
-                                        </a>
-                                        <div class="product-action">
-                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                            <a href="#"><i class="fa fa-heart"></i></a>
-                                            <a href="#"><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-content">
-                                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                        <div class="ratting">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                        <div class="price">$22 <span>$25</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="product-item">
-                                    <div class="product-image">
-                                        <a href="product-detail.html">
-                                            <img src="img/product-5.png" alt="Product Image">
-                                        </a>
-                                        <div class="product-action">
-                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                            <a href="#"><i class="fa fa-heart"></i></a>
-                                            <a href="#"><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-content">
-                                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                        <div class="ratting">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                        <div class="price">$22 <span>$25</span></div>
-                                    </div>
+                                <div class="price">
+                                    {% if hot.discounted_price > 0 %}
+                                    ${{hot.discounted_price}} <span>${{hot.price}}</span>
+                                    {% else %}
+                                    ${{hot.price}}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+                    {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
                     <div class="col-lg-3">
                         <div class="sidebar-widget category">
                             <h2 class="title">Category</h2>
