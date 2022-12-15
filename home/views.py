@@ -34,6 +34,17 @@ class ProductDetailView(BaseView):
         self.views['product_reviews'] = ProductReview.objects.filter(slug = slug)
         return render(request, 'product-detail.html', self.views)
 
+class SearchProduct(BaseView):
+    def get(self,request):
+        self.views
+        if request.method == 'GET':
+            query = request.GET['query']
+            if query == '':
+                return redirect('/')
+            else:
+                self.views['search_product'] = Product.objects.filter(name__icontains=query)
+                return render(request, 'search.html', self.views)
+
 def product_review(request):
     if request.method == 'POST':
         name = request.POST['name']
