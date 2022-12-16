@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from .models import *
 from django.views.generic import View
 import datetime
+from django.contrib import messages
+from django.contrib.auth.models import User
 # Create your views here.
 class BaseView(View):
     views = {}
@@ -65,3 +67,30 @@ def product_review(request):
         )
         data.save()
         return redirect(f'/product_details/{slug}')
+
+def signup(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        cpassword = request.POST['cpassword']
+        if password == cpassword:
+            if User.objects.filter(username=username).exists():
+                messages.error(request,'The username is not available.')
+                return redirect('/signup')
+            elif User.objects.filter(email=email).exists():
+                messages.error(request,'The email is not available.')
+                return redirect('/signup')
+            else:
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password
+                )
+                user.save()
+                return redirect('/signup')
+        else:
+            messages.error(request,'The password does not match.')
+            return redirect('/signup')
+
+    return render(request,'signup.html')

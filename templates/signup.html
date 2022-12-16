@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">User</a></li>
+                    <li class="breadcrumb-item active">Login</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+
+
+        <!-- Login Start -->
+        <div class="login">
+            <div class="container">
+                <div class="section-header">
+                    <h3>User Registration & Login</h3>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec viverra at massa sit amet ultricies. Nullam consequat, mauris non interdum cursus
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="register-form">
+                            <div class="row">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                <div class="col-md-6">
+                                    <label>E-mail</label>
+                                    <input name="email" class="form-control" type="email" placeholder="E-mail">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Username</label>
+                                    <input name="username" class="form-control" type="text" placeholder="Username">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Password</label>
+                                    <input name="password" class="form-control" type="password" placeholder="Password">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Re-Password</label>
+                                    <input name="cpassword" class="form-control" type="password" placeholder="Re-Password">
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn">Submit</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Login End -->
+
+{% endblock %}

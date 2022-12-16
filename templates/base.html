@@ -46,18 +46,27 @@
                     </div>
                     <div class="col-md-3">
                         <div class="user">
+                            {% if user.is_authenticated %}
                             <div class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.username}}</a>
                                 <div class="dropdown-menu">
-                                    <a href="#" class="dropdown-item">Login</a>
-                                    <a href="#" class="dropdown-item">Register</a>
+                                    <a href="/accounts/logout" class="dropdown-item">Logout</a>
                                 </div>
+                                {% else %}
+                                <div class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Accounts</a>
+                                <div class="dropdown-menu">
+                                    <a href="/accounts/login" class="dropdown-item">Login</a>
+                                    <a href="/signup" class="dropdown-item">Register</a>
+                                </div>
+
                             </div>
                             <div class="cart">
                                 <i class="fa fa-cart-plus"></i>
                                 <span>(0)</span>
                             </div>
                         </div>
+                            {% endif %}
                     </div>
                 </div>
             </div>
